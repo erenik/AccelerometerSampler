@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DefaultLL">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DefaultText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DefaultButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DefaultGraph">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+
+
+    <!-- Copy pasted below, might be removed shortly $$$$$$$$$$$$$$$$$$$$ -->
+
+    <style name="Evergreen" parent="Theme.AppCompat">
+    <item name="android:textColor">@color/mainTextColor</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <!--        <item name="android:background">@color/mainButtonBackground</item>-->
+    </style>
+    <!-- Custom style, used for background with the nice gradient. -->
+    <style name="Evergreen.BG">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Evergreen.Logo">
+    </style>
+
+    <style name="Evergreen.IconLayout">     <!-- The outer box -->
+    <!--        <item name="android:background">@drawable/icon</item>-->
+    <item name="android:layout_width">0px</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">3</item>
+    </style>
+
+    <style name="Evergreen.IconInnerLayout">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Evergreen.IconBG">
+    <!-- <item name="android:src">@drawable/icon</item> -->
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Evergreen.IconButton">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:background">@null</item>
+    <item name="android:scaleType">fitStart</item>
+    </style>
+
+    <style name="Evergreen.IconText">
+    <item name="android:textColor">@color/iconTextColor</item>
+    <item name="android:text">10/10</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:gravity">center|bottom</item>
+    <item name="android:textSize">18dp</item>
+    <item name="android:paddingBottom">8dp
+    </item> <!-- Padding of 16 good if icons weight is 2 -->
+    </style>
+
+    <style name="Evergreen.IconTextTitle" parent="Evergreen.IconText">
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">12dp</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:paddingTop">8dp</item>
+    </style>
+    <!-- Default for TextViews -->
+    <style name="Evergreen.Text">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/mainTextColor</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+    <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

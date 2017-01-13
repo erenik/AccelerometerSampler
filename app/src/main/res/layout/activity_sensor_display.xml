@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,23 +11,46 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_sensor_display" />
+    <!-- Very inclusive...! -->
+<!--    <include layout="@layout/content_sensor_display" /> -->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Very World!" />
+
+        <LinearLayout style="@style/DefaultLL">
+            <TextView style="@style/DefaultText"  android:text="GPS Location value: " />
+            <TextView style="@style/DefaultText" android:id="@+id/textView_GPSLocation" android:text="---" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/DefaultLL">
+            <TextView style="@style/DefaultText"  android:text="Accelerometer value: " />
+            <TextView style="@style/DefaultText" android:id="@+id/textView_AccelerometerValues" android:text="---" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/DefaultLL" android:layout_height="0dp" android:layout_weight="1" android:layout_width="match_parent">
+            <ImageView style="@style/DefaultGraph" />
+            <ImageView style="@style/DefaultGraph" />
+        </LinearLayout>
+
+
+        <!-- Buttons at the end -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button style="@style/DefaultButton" android:id="@+id/buttonRefreshGraphs" android:text="Refresh Graphs" />
+            <Button style="@style/DefaultButton" android:id="@+id/buttonRestart" android:text="Restart" />
+            <Button style="@style/DefaultButton" android:id="@+id/buttonUploadToServer" android:text="Upload to server" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

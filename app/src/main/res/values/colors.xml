@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="black">#FF000000</color>
+    <color name="info">#FFBBBBBB</color>
+    <color name="attacked">#FFfa4431</color>    <!-- Old attacked colors : f88000 -->
+    <color name="event">#FFEEEECC</color>
+    <color name="success">#FFF0F0DD</color>
+    <color name="progress">#FFAA8888</color>
+    <color name="problemNotification">#FFFF8500</color>
+    <color name="attackMiss">#FF999999</color>
+    <color name="attack">#FFEEEEEE</color>
+    <color name="exp">#FFDDDD55</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="backgroundMainGreen">#FF013220</color>
+
+    <!-- Text colors -->
+    <color name="mainTextColor">#FFdedbcb</color>
+    <color name="textColor.Brighter">#FFe4e4e4</color>
+    <color name="textColor.Brightest">#FFf1f1f1</color>
+    <color name="textColor.Title">#FFf4f4f4</color>
+
+    <color name="mainButtonTextColor">#FFDDDDDD</color>
+    <color name="mainButtonBackground">#FF00a166</color>
+
+    <!-- New colors with the purple icons -->
+    <color name="mainTextNew">#fffff8d5</color>
+    <color name="iconTextColor">#ff89e850</color>
+
+    <!-- Old values
+    dedbcb
+    <color name="mainTextColor">#FFBBBBBB</color>
+    <color name="attacked">#FFFF0000</color>
+<color name="mainButtonBackground">#FF085b3d</color>
+    -->
+
+</resources>

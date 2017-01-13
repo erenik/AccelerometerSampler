@@ -1,4 +1,4 @@
-package erenik.seriousgames.accelerometersampler;
+package erenik.accelerometersampler;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import android.os.Handler;
@@ -31,10 +32,8 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_display);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Button fab = (Button) findViewById(R.id.buttonUploadToServer);
+        /// Send data to Server? Store locally?
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,13 +44,12 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
             }
         });
 
-        /// Set up sensors
+        /// Set up Accelerometer sensors
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
         sensorManager.registerListener(this, sensor, 10000000);
 
-                /// Set up handler for iterated samplings
+        /// Set up handler for iterated samplings
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -112,8 +110,8 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
             text = text + integral + " ";
         }
         // Very cool.
-        TextView sensorText = (TextView) findViewById(R.id.SensorTextView);
-        sensorText.setText("Sensor changed!" + sensorChanges++ +": "+text);
+        TextView sensorText = (TextView) findViewById(R.id.textView_AccelerometerValues);
+        sensorText.setText(""+text+"  sample "+sensorChanges++);
     }
 
     @Override
