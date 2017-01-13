@@ -41,6 +41,11 @@
             <ImageView style="@style/DefaultGraph" />
         </LinearLayout>
 
+        <LinearLayout style="@style/DefaultLL">
+            <TextView style="@style/DefaultText"  android:text="Distance traveled: " />
+            <TextView style="@style/DefaultText" android:id="@+id/textView_DistanceTraveled" android:text="---" />
+        </LinearLayout>
+
 
         <!-- Buttons at the end -->
         <LinearLayout
