@@ -6,8 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import android.os.Handler;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.ActivityRecognition;
 
 public class SensorDisplayActivity extends AppCompatActivity implements SensorEventListener
 {
@@ -32,13 +33,20 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_display);
+
+        // Set up Google Play Services for Activity regognition?
+        new GoogleApiClient.Builder(context)
+                .addApi(ActivityRecognition.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build()
+
+
         Button fab = (Button) findViewById(R.id.buttonUploadToServer);
         /// Send data to Server? Store locally?
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Very snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 TextView tv = (TextView) findViewById(R.id.PrimaryTextView);
                 tv.setText("Very snackyyy " + timesClicked++);
             }
