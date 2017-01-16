@@ -6,6 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,10 +18,15 @@ import android.widget.TextView;
 
 import android.os.Handler;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
 
-public class SensorDisplayActivity extends AppCompatActivity implements SensorEventListener
+public class SensorDisplayActivity
+        extends AppCompatActivity
+        implements SensorEventListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
 {
     static int timesClicked = 0;
     Handler h = new Handler(); // iteration handler
@@ -34,12 +41,13 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_display);
 
+        Context context = getBaseContext();
         // Set up Google Play Services for Activity regognition?
         new GoogleApiClient.Builder(context)
                 .addApi(ActivityRecognition.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .build()
+                .build();
 
 
         Button fab = (Button) findViewById(R.id.buttonUploadToServer);
@@ -128,5 +136,21 @@ public class SensorDisplayActivity extends AppCompatActivity implements SensorEv
         /// Oioi.
         // D:
         System.out.println("Accuracy changed");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        System.out.println("On connected");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        System.out.println("Connection suspended");
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        System.out.println("Connection failed");
     }
 }
