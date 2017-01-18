@@ -73,6 +73,10 @@ public class SensorDisplayActivity
     Sensor sensor;
     GoogleApiClient mGoogleApiClient;
 
+
+    // Default on, Start/Stop button to toggle it.
+    boolean on = true;
+
     /**
      * Adapter backed by a list of DetectedActivity objects.
      */
@@ -94,7 +98,20 @@ public class SensorDisplayActivity
                 tv.setText("Very snackyyy " + timesClicked++);
             }
         });
-
+        findViewById(R.id.button_Restart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorChanges = 0;
+                accPoints.clear();
+            }
+        });
+        findViewById(R.id.button_StartStop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                on = !on;
+                ((TextView)v).setText(on? "Stop" : "Start");
+            }
+        });
 
         InitGoogleAPI();
 
@@ -224,9 +241,46 @@ public class SensorDisplayActivity
     /// All stored accelerometer-sensor points.
     ArrayList<SensorData> accPoints = new ArrayList<>();
 
+    long lastGraphUpdateMs = System.currentTimeMillis();
     @Override
     public void onSensorChanged(SensorEvent event)
     {
+        if (!on)
+            return;
+
+        float[] values = event.values; // Update TextViews
+        String text = "";
+        for (int i = 0; i < values.length; ++i)
+        {
+            int integral = (int)values[i];
+            text = text + integral + " ";
+        }
+        TextView sensorText = (TextView) findViewById(R.id.textView_AccelerometerValues);
+        sensorText.setText(""+text+"  sample "+sensorChanges++);
+
+        SensorData newSensorData = new SensorData(); // Copy over data from Android data to own class type.
+        newSensorData.timestamp = event.timestamp; // Time-stamp in nanoseconds.
+        System.arraycopy(event.values, 0, newSensorData.values, 0, 3);
+        accPoints.add(newSensorData);
+
+        // Every X updates, update the graph?
+        long now = System.currentTimeMillis();
+        if (now - lastGraphUpdateMs > 40) // Update around 25 fps? every
+        {
+//            System.out.println("Update");
+            updateAccGraph(1000);
+        }
+        else
+        {
+  //          System.out.println("Sleep");
+        }
+    }
+
+    float bounds = 15.f;
+
+    public void updateAccGraph(int millisecondsToShow)
+    {
+        lastGraphUpdateMs = System.currentTimeMillis();
         GraphView graph = (GraphView) findViewById(R.id.graphAcc);
         graph.removeAllSeries(); // Clear old data.
 
@@ -238,24 +292,10 @@ public class SensorDisplayActivity
 
         Viewport vp = graph.getViewport();
         vp.setYAxisBoundsManual(true);
-        vp.setMaxY(13.f);
-        vp.setMinY(-13.f);
 
-        float[] values = event.values;
-        String text = "";
-        for (int i = 0; i < values.length; ++i)
-        {
-            int integral = (int)values[i];
-            text = text + integral + " ";
-        }
-        // Very cool.
-        TextView sensorText = (TextView) findViewById(R.id.textView_AccelerometerValues);
-        sensorText.setText(""+text+"  sample "+sensorChanges++);
-
-        SensorData newSensorData = new SensorData(); // Copy over data from Android data to own class type.
-        newSensorData.timestamp = event.timestamp; // Time-stamp in nanoseconds.
-        System.arraycopy(event.values, 0, newSensorData.values, 0, 3);
-        accPoints.add(newSensorData);
+        // Always reduce bounds to fit the view if possible.
+        vp.setMaxY(bounds);
+        vp.setMinY(-bounds);
 
         ArrayList<LineGraphSeries<DataPoint>> series = new ArrayList<>();
         for (int i = 0; i < 3; ++i)
@@ -263,12 +303,12 @@ public class SensorDisplayActivity
 
         /// Should use boolean for which one to use...?
         boolean useMaxTimeDiff = true;
-        int maxTimeDiffMs = 500;
+        int maxTimeDiffMs = millisecondsToShow;
         int maxTimeDiffNanoSecs = maxTimeDiffMs * 1000000;
         int maxPoints = 20;
 
         long lastTimeStamp = accPoints.get(accPoints.size() - 1).timestamp;
-        int firstIndex = accPoints.size() - maxPoints > 0? accPoints.size() - maxPoints : 0; // First index if using number of points.
+        int firstIndex = (accPoints.size() - maxPoints) > 0? accPoints.size() - maxPoints : 0; // First index if using number of points.
         if (useMaxTimeDiff) // Find first index for when using the time diff max.
             for (int i = accPoints.size() - 1; i > 0; --i)
             {
@@ -281,18 +321,37 @@ public class SensorDisplayActivity
             }
 
         long firstTimeStamp = accPoints.get(firstIndex).timestamp;
-        vp.setMinX(firstTimeStamp); // Set min/max X
-        vp.setMaxX(lastTimeStamp);
 
+        int sampleNumber = 0;
+        int firstX = -1, lastX = -1;
+        float largestAbsVal = 0;
         for (int i = firstIndex; i < accPoints.size(); ++i)
         {
-
             SensorData sd = accPoints.get(i);
             // timediff in nanosecs: sd.timestamp - firstTimeStamp
+            int x = sampleNumber;
+            if (firstX == -1)
+                firstX = x;
+            lastX = x;
             for (int j = 0; j < 3; ++j) {
-                series.get(j).appendData(new DataPoint(i, sd.values[j]), true, maxPoints, true);
+                series.get(j).appendData(new DataPoint(x, sd.values[j]), false, 1000, true);
+                float absVal = Math.abs(sd.values[j]);
+                if (absVal > largestAbsVal)
+                    largestAbsVal = absVal;
             }
+            ++sampleNumber;
         }
+        // Move towards the highest value + 1 always?
+        bounds = 0.95f * bounds + 0.05f * (largestAbsVal + 3);
+
+
+        vp.setXAxisBoundsManual(true);
+        vp.setMinX(firstX); // Set min/max X
+        vp.setMaxX(lastX);
+        // 0 to 25, not being displayed...
+        TextView tv = (TextView) findViewById(R.id.textView_Bounds);
+        tv.setText("firstX: "+firstX+" lastX: "+lastX+" indices added: "+(accPoints.size() - firstIndex));
+
         series.get(0).setColor(0xFFFF0000);
         series.get(1).setColor(0xFF00FF00);
         series.get(2).setColor(0xFF0000FF);

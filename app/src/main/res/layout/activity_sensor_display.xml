@@ -29,6 +29,7 @@
             <TextView style="@style/DefaultText"  android:text="Accelerometer value: " />
             <TextView style="@style/DefaultText" android:id="@+id/textView_AccelerometerValues" android:text="---" />
         </LinearLayout>
+        <TextView style="@style/DefaultText" android:id="@+id/textView_Bounds"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -64,8 +65,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <Button style="@style/DefaultButton" android:id="@+id/buttonRefreshGraphs" android:text="Refresh Graphs" />
-            <Button style="@style/DefaultButton" android:id="@+id/buttonRestart" android:text="Restart" />
+            <Button style="@style/DefaultButton" android:id="@+id/button_StartStop" android:text="Stop" />
+            <Button style="@style/DefaultButton" android:id="@+id/button_Restart" android:text="Restart" />
             <Button style="@style/DefaultButton" android:id="@+id/buttonUploadToServer" android:text="Upload to server" />
         </LinearLayout>
 
