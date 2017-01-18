@@ -11,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -33,9 +34,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityRecognitionApi;
 import com.google.android.gms.location.DetectedActivity;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /** Ref src code for Google play services Activity recognition API
  https://github.com/googlesamples/android-play-location/tree/master/ActivityRecognition
@@ -207,9 +215,32 @@ public class SensorDisplayActivity
     }
 
     int sensorChanges = 0;
+    private class SensorData
+    {
+        long timestamp = 0;
+        float[] values = new float[3];
+    }
+
+    /// All stored accelerometer-sensor points.
+    ArrayList<SensorData> accPoints = new ArrayList<>();
+
     @Override
     public void onSensorChanged(SensorEvent event)
     {
+        GraphView graph = (GraphView) findViewById(R.id.graphAcc);
+        graph.removeAllSeries(); // Clear old data.
+
+        // use static labels for horizontal and vertical labels
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+//        staticLabelsFormatter.setHorizontalLabels(new String[] {"old", "newest"});
+//        staticLabelsFormatter.setVerticalLabels(new String[] {"-10", "0", "10"});
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+        Viewport vp = graph.getViewport();
+        vp.setYAxisBoundsManual(true);
+        vp.setMaxY(13.f);
+        vp.setMinY(-13.f);
+
         float[] values = event.values;
         String text = "";
         for (int i = 0; i < values.length; ++i)
@@ -220,6 +251,53 @@ public class SensorDisplayActivity
         // Very cool.
         TextView sensorText = (TextView) findViewById(R.id.textView_AccelerometerValues);
         sensorText.setText(""+text+"  sample "+sensorChanges++);
+
+        SensorData newSensorData = new SensorData(); // Copy over data from Android data to own class type.
+        newSensorData.timestamp = event.timestamp; // Time-stamp in nanoseconds.
+        System.arraycopy(event.values, 0, newSensorData.values, 0, 3);
+        accPoints.add(newSensorData);
+
+        ArrayList<LineGraphSeries<DataPoint>> series = new ArrayList<>();
+        for (int i = 0; i < 3; ++i)
+            series.add(new LineGraphSeries<DataPoint>());
+
+        /// Should use boolean for which one to use...?
+        boolean useMaxTimeDiff = true;
+        int maxTimeDiffMs = 500;
+        int maxTimeDiffNanoSecs = maxTimeDiffMs * 1000000;
+        int maxPoints = 20;
+
+        long lastTimeStamp = accPoints.get(accPoints.size() - 1).timestamp;
+        int firstIndex = accPoints.size() - maxPoints > 0? accPoints.size() - maxPoints : 0; // First index if using number of points.
+        if (useMaxTimeDiff) // Find first index for when using the time diff max.
+            for (int i = accPoints.size() - 1; i > 0; --i)
+            {
+                long timeStamp = accPoints.get(i).timestamp;
+                if (lastTimeStamp - timeStamp > maxTimeDiffNanoSecs)
+                {
+                    firstIndex = i;
+                    break;
+                }
+            }
+
+        long firstTimeStamp = accPoints.get(firstIndex).timestamp;
+        vp.setMinX(firstTimeStamp); // Set min/max X
+        vp.setMaxX(lastTimeStamp);
+
+        for (int i = firstIndex; i < accPoints.size(); ++i)
+        {
+
+            SensorData sd = accPoints.get(i);
+            // timediff in nanosecs: sd.timestamp - firstTimeStamp
+            for (int j = 0; j < 3; ++j) {
+                series.get(j).appendData(new DataPoint(i, sd.values[j]), true, maxPoints, true);
+            }
+        }
+        series.get(0).setColor(0xFFFF0000);
+        series.get(1).setColor(0xFF00FF00);
+        series.get(2).setColor(0xFF0000FF);
+        for (int i = 0; i < 3; ++i)
+            graph.addSeries(series.get(i));
     }
 
     @Override

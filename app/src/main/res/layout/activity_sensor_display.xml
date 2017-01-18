@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context="erenik.accelerometersampler.SensorDisplayActivity">
 
@@ -29,15 +30,34 @@
             <TextView style="@style/DefaultText" android:id="@+id/textView_AccelerometerValues" android:text="---" />
         </LinearLayout>
 
-        <LinearLayout style="@style/DefaultLL" android:layout_height="0dp" android:layout_weight="1" android:layout_width="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <LinearLayout style="@style/DefaultLL" android:layout_height="match_parent" android:layout_width="wrap_content"
+                android:orientation="vertical">
+                <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphAcc"
+                    app:seriesType="line"
+                    android:layout_height="200dp" android:layout_width="match_parent"
+                    />
+                <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphGPS"
+                    app:seriesType="line"
+                    android:layout_height="200dp" android:layout_width="match_parent"
+                    />
+            </LinearLayout>
+        </ScrollView>
+<!--             android:layout_width="match_parent"
+            android:layout_height="200dip"
             <ImageView style="@style/DefaultGraph" />
             <ImageView style="@style/DefaultGraph" />
-        </LinearLayout>
+ -->
 
         <LinearLayout style="@style/DefaultLL">
             <TextView style="@style/DefaultText"  android:text="Distance traveled: " />
             <TextView style="@style/DefaultText" android:id="@+id/textView_DistanceTraveled" android:text="---" />
         </LinearLayout>
+
 
 
         <!-- Buttons at the end -->
