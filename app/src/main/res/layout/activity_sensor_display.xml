@@ -14,22 +14,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/PrimaryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Very World!" />
 
-        <LinearLayout style="@style/DefaultLL">
-            <TextView style="@style/DefaultText"  android:text="GPS Location value: " />
-            <TextView style="@style/DefaultText" android:id="@+id/textView_GPSLocation" android:text="---" />
+        <LinearLayout style="@style/DefaultLLVertical">
+            <TextView style="@style/DefaultText"  android:text="Sensing frame, Acc Min/Max/Avg/Stddev: " />
+            <TextView style="@style/DefaultText" android:id="@+id/textView_SensingFrameAcc" android:text="---" />
+        </LinearLayout>
+        <LinearLayout style="@style/DefaultLLVertical">
+            <TextView style="@style/DefaultText"  android:text="Sensing frame, Gyro Min/Max/Avg/Stddev: " />
+            <TextView style="@style/DefaultText" android:id="@+id/textView_SensingFrameGyro" android:text="---" />
         </LinearLayout>
 
         <LinearLayout style="@style/DefaultLL">
-            <TextView style="@style/DefaultText"  android:text="Accelerometer value: " />
-            <TextView style="@style/DefaultText" android:id="@+id/textView_AccelerometerValues" android:text="---" />
+            <TextView style="@style/DefaultText"  android:text="Transport: " />
+            <Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/spinnerTransport" />
         </LinearLayout>
-        <TextView style="@style/DefaultText" android:id="@+id/textView_Bounds"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -38,13 +42,43 @@
             >
             <LinearLayout style="@style/DefaultLL" android:layout_height="match_parent" android:layout_width="wrap_content"
                 android:orientation="vertical">
-                <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphAcc"
-                    app:seriesType="line"
-                    android:layout_height="200dp" android:layout_width="match_parent"
-                    />
+                <!-- Accelerometer -->
+                <LinearLayout style="@style/DefaultLL">
+                    <TextView style="@style/DefaultText"  android:text="Accelerometer value: " />
+                    <TextView style="@style/DefaultText" android:id="@+id/textView_AccelerometerValues" android:text="---" />
+                </LinearLayout>
+                <LinearLayout style="@style/DefaultLL">
+                    <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphAcc"
+                        app:seriesType="line"
+                        android:layout_height="100dp" android:layout_width="match_parent"
+                        />
+                    <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphAccMagn"
+                        app:seriesType="line"
+                        android:layout_height="100dp" android:layout_width="match_parent"
+                        />
+                </LinearLayout>
+                <!-- Gyroscope -->
+                <LinearLayout style="@style/DefaultLL">
+                    <TextView style="@style/DefaultText"  android:text="Gyroscope value: " />
+                    <TextView style="@style/DefaultText" android:id="@+id/textView_GyroscopeValues" android:text="---" />
+                </LinearLayout>
+                <LinearLayout style="@style/DefaultLL">
+                    <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphGyro"
+                        app:seriesType="line"
+                        android:layout_height="100dp" android:layout_width="match_parent"
+                        />
+                    <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphGyroMagn"
+                        app:seriesType="line"
+                        android:layout_height="100dp" android:layout_width="match_parent"
+                        />
+                </LinearLayout>
+                <LinearLayout style="@style/DefaultLL">
+                    <TextView style="@style/DefaultText"  android:text="GPS Location value: " />
+                    <TextView style="@style/DefaultText" android:id="@+id/textView_GPSLocation" android:text="---" />
+                </LinearLayout>
                 <com.jjoe64.graphview.GraphView style="@style/DefaultGraph" android:id="@+id/graphGPS"
                     app:seriesType="line"
-                    android:layout_height="200dp" android:layout_width="match_parent"
+                    android:layout_height="100dp" android:layout_width="match_parent"
                     />
             </LinearLayout>
         </ScrollView>
@@ -68,6 +102,9 @@
             <Button style="@style/DefaultButton" android:id="@+id/button_StartStop" android:text="Stop" />
             <Button style="@style/DefaultButton" android:id="@+id/button_Restart" android:text="Restart" />
             <Button style="@style/DefaultButton" android:id="@+id/buttonUploadToServer" android:text="Upload to server" />
+        </LinearLayout>
+        <LinearLayout style="@style/DefaultLL">
+            <Button style="@style/DefaultButton" android:id="@+id/buttonSendAsText" android:text="Send as text" />
         </LinearLayout>
 
     </LinearLayout>
